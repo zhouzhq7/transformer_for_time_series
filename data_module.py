@@ -17,10 +17,9 @@ class TSDataModule(pl.LightningDataModule):
 
     def load_data(self):
         import pandas as pd
-        train_data = pd.read_csv('./data/toy_data/train.csv').to_numpy()
-        val_data = pd.read_csv('./data/toy_data/val.csv').to_numpy()
-
-        return train_data, val_data
+        data = pd.read_csv('./data/stock_k_lines/600559_adjustflag_2.csv')['close'].to_numpy()
+        train_sample = 2600
+        return data[:2600], data[2600:]
 
     def generate_toy_data(self, seq_len=1024):
         import numpy as np
@@ -65,9 +64,9 @@ class TSDataModule(pl.LightningDataModule):
 
         from sklearn.preprocessing import MinMaxScaler
         scaler = MinMaxScaler(feature_range=(-1, 1))
-        scaler.fit(train_data)
-        train_data = scaler.transform(train_data).reshape(-1)
-        val_data = scaler.transform(val_data).reshape(-1)
+        scaler.fit(train_data.reshape(-1, 1))
+        train_data = scaler.transform(train_data.reshape(-1, 1)).reshape(-1)
+        val_data = scaler.transform(val_data.reshape(-1, 1)).reshape(-1)
 
         # convert time series data to trainable format
         self.train_data = self.format_raw_data(train_data)

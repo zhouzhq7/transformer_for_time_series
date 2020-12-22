@@ -47,7 +47,7 @@ def train():
     model = TransformerModel(250, 10, 1)
 
     # trainer
-    trainer = pl.Trainer(gpus=[0], gradient_clip_val=0.7)
+    trainer = pl.Trainer(gradient_clip_val=0.7)
 
     trainer.fit(model=model, datamodule=dm)
     # prediction
@@ -55,5 +55,5 @@ def train():
     pass
 
 if __name__=="__main__":
-    inference()
-    # train()
+    # inference()
+    train()
